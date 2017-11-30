@@ -41,18 +41,34 @@ loss = tf.nn.l2_loss(out_activation - expected)
 
 train_step = tf.train.GradientDescentOptimizer(0.001).minimize(loss)
 
+tf.summary.scalar('loss', loss)
+
 sess = tf.InteractiveSession()
+
+merged = tf.summary.merge_all()
+
+# To start tensorboard:
+# AppData\Local\Programs\Python\Python36\python.exe -m tensorboard.main --logdir=C:\Users\lukac\train
+train_writer = tf.summary.FileWriter(r"C:\Users\lukac\train", sess.graph)
+test_writer = tf.summary.FileWriter(r"C:\Users\lukac\test")
 
 tf.global_variables_initializer().run()
 
 test_input, test_expected = generate_training_data(10000)
 
-for i in range(5000):
+for i in range(500000):
     input_example, expected_example = generate_training_data(100)
     sess.run(train_step, feed_dict={x: input_example, expected: expected_example})
     #print(i, input_example, expected_example)
-    if i % 50 == 0:
-        print(i, sess.run(loss, feed_dict={x: input_example, expected: expected_example}), sess.run(loss, feed_dict={x: test_input, expected: test_expected}))
+    if i % 100 == 99:
+        print(i, 
+              sess.run(loss, feed_dict={x: input_example, expected: expected_example}), 
+              sess.run(loss, feed_dict={x: test_input, expected: test_expected}))
+        train_writer.add_summary(sess.run(merged, feed_dict={x: input_example, expected: expected_example}), i)
+        test_writer.add_summary(sess.run(merged, feed_dict={x: test_input, expected: test_expected}), i)
+
+train_writer.close()
+test_writer.close()
 
 while True:
     n = 5
