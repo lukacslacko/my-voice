@@ -13,7 +13,7 @@ saver = tf.train.Saver()
 
 sess = tf.InteractiveSession()
 
-saver.restore(sess, r"C:\Users\lukac\voicetf\ckpt-999")
+saver.restore(sess, r"C:\Users\lukac\voicetf\ckpt")
 
 def extrapolate(xs, steps):
     result = xs
@@ -24,5 +24,5 @@ def extrapolate(xs, steps):
     return result
 
 for i in range(n):
-    plt.plot(extrapolate(a[i], 10))
+    plt.plot(extrapolate(a[i], 20))
 plt.show()

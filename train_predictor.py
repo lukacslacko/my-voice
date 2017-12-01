@@ -20,7 +20,7 @@ test_dict = generate_test_data(10000)
 
 loss = tf.nn.l2_loss(predictor.out_activation - expected)
 
-train_step = tf.train.GradientDescentOptimizer(0.001).minimize(loss)
+train_step = tf.train.AdagradOptimizer(0.1).minimize(loss)
 
 tf.summary.scalar('loss', loss)
 
@@ -47,7 +47,7 @@ for i in range(500_000):
               sess.run(loss, feed_dict=test_dict))
         train_writer.add_summary(sess.run(merged, feed_dict=train_dict), i)
         test_writer.add_summary(sess.run(merged, feed_dict=test_dict), i)
-        saver.save(sess, r"C:\Users\lukac\voicetf\ckpt-%03d" % i)
+        saver.save(sess, r"C:\Users\lukac\voicetf\ckpt")
 
 train_writer.close()
 test_writer.close()

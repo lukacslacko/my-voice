@@ -1,8 +1,7 @@
 import tensorflow as tf
 
 class Cell:
-    def __init__(
-        self, input_window_size, prediction_window_size, layer_sizes):
+    def __init__(self, input_window_size, prediction_window_size, layer_sizes):
         self.input_window_size = input_window_size
         self.prediction_window_size = prediction_window_size
         self.layer_sizes = layer_sizes
