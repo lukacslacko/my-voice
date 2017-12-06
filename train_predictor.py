@@ -1,17 +1,20 @@
-import sine_wave
+import source
 import tensorflow as tf
 import voice_predictor
 
 predictor = voice_predictor.VoicePredictor()
 expected = tf.placeholder(tf.float32, [None, predictor.prediction_window_size])
 
+source = source.Source()
+batch_size = 100
+
 def generate_test_data(size):
-    x, exp = sine_wave.generate_training_data(
+    x, exp = source.generate_training_data(
         size, predictor.input_window_size, predictor.prediction_window_size)
     return {predictor.x: x, expected: exp}
 
 def generate_training_data(size):
-    x, exp = sine_wave.generate_training_data(
+    x, exp = source.generate_training_data(
         size, predictor.input_window_size, predictor.prediction_window_size)
     return {predictor.x: x, expected: exp}
 
@@ -38,7 +41,7 @@ tf.global_variables_initializer().run()
 saver = tf.train.Saver()
 
 for i in range(500_000):
-    train_dict = generate_training_data(100)
+    train_dict = generate_training_data(batch_size)
     sess.run(train_step, feed_dict=train_dict)
     #print(i, input_example, expected_example)
     if i % 100 == 99:
